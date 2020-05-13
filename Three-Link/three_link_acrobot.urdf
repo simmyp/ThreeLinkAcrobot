@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+
+<robot xmlns="http://drake.mit.edu"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://drake.mit.edu ../../doc/drakeURDF.xsd" name="SimpleDoublePendulum">
+  <material name="black">
+    <color rgba="0 0 0 1" />
+  </material>
+  <material name="MITred">
+    <color rgba=".6 .2 .2 1" />
+  </material>
+
+  <link name="base">
+    <inertial>
+      <origin xyz="0 0 0" />
+      <mass value="0.01" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+  <joint name="base_weld" type="fixed">
+    <parent link="world" />
+    <child link="base" />
+  </joint>
+
+  <link name="upper_arm">
+    <inertial> 
+      <origin xyz="0 0 -0.58" rpy="0 0 0" />
+      <mass value="5.4" />
+      <inertia ixx="0.15" ixy="0" ixz="0" iyy="0.15" iyz="0" izz="0"/> 
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.29" rpy="0 0 0" />
+      <geometry>
+         <cylinder length="0.58" radius=".01" />
+      </geometry>
+      <material name="Cyan">
+          <color rgba="0 1.0 1.0 1.0"/>
+      </material>
+    </visual> 
+    <visual>
+      <origin xyz="0 0 -0.58"/>
+      <geometry>
+        <sphere radius=".03"/>
+      </geometry>
+      <material name="MITred" />
+    </visual>
+  </link>
+  <joint name="wrist" type="continuous">
+    <parent link="base"/>
+    <child link="upper_arm" />
+    <axis xyz="0 1 0" />
+  </joint>
+  
+  <link name="lower_arm">
+    <inertial> 
+      <origin xyz="0 0 -0.5" rpy="0 0 0" />
+      <mass value="29.5" />
+      <inertia ixx="0.61" ixy="0" ixz="0" iyy="0.61" iyz="0" izz="0"/> 
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -.25" rpy="0 0 0" />
+      <geometry>
+         <cylinder length="0.5" radius=".01" />
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual> 
+    <visual>
+      <origin xyz="0 0 -0.5"/>
+      <geometry>
+        <sphere radius=".03"/>
+      </geometry>
+      <material name="MITred" />
+    </visual>
+  </link>
+  <joint name="shoulder" type="continuous">
+    <parent link="upper_arm"/>
+    <origin xyz="0 0 -0.58" />
+    <child link="lower_arm" />
+    <axis xyz="0 1 0" />
+    <dynamics damping="0.1" />
+  </joint>
+  <transmission type="SimpleTransmission" name="shoulder_trans">
+    <actuator name="shoulder" />
+    <joint name="shoulder" />
+    <mechanicalReduction>1</mechanicalReduction>
+  </transmission>
+  
+  <link name="lower_lower_arm">
+    <inertial> 
+      <origin xyz="0 0 -0.79" rpy="0 0 0" />
+      <mass value="18.5" />
+      <inertia ixx="0.96" ixy="0" ixz="0" iyy="0.96" iyz="0" izz="0"/> 
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.395" rpy="0 0 0" />
+      <geometry>
+         <cylinder length="0.79" radius=".01" />
+      </geometry>
+      <material name="black" />
+    </visual> 
+    <visual>
+      <origin xyz="0 0 -0.79"/>
+      <geometry>
+        <sphere radius=".03"/>
+      </geometry>
+      <material name="MITred" />
+    </visual>
+    </link>
+    <joint name="waist" type="continuous">
+      <parent link="lower_arm"/>
+      <origin xyz="0 0 -0.5" />
+      <child link="lower_lower_arm" />
+      <axis xyz="0 1 0" />
+      <dynamics damping="0.1" />
+    </joint>
+    <transmission type="SimpleTransmission" name="waist_trans">
+      <actuator name="waist" />
+      <joint name="waist" />
+      <mechanicalReduction>1</mechanicalReduction>
+    </transmission>
+
+
+  
+</robot>
